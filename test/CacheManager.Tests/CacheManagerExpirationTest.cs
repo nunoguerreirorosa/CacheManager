@@ -1,13 +1,13 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using CacheManager.Core;
-using FluentAssertions;
-using Xunit;
-
-namespace CacheManager.Tests
+﻿namespace CacheManager.Tests
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using CacheManager.Core;
+    using FluentAssertions;
+    using Xunit;
+
     [ExcludeFromCodeCoverage]
     public class CacheManagerExpirationTest
     {
@@ -201,8 +201,6 @@ namespace CacheManager.Tests
             }
         }
 
-#if !NETCOREAPP
-
         public class SysRuntime
         {
             [Fact]
@@ -239,8 +237,6 @@ namespace CacheManager.Tests
                 }
             }
         }
-
-#endif
 
         public class Redis
         {
@@ -561,7 +557,7 @@ namespace CacheManager.Tests
                     var expiration = TimeSpan.FromSeconds(-1);
                     Action act = () => cache.Add(new CacheItem<object>(key, "value", ExpirationMode.Sliding, expiration));
 
-                    act.ShouldThrow<ArgumentOutOfRangeException>()
+                    act.Should().Throw<ArgumentOutOfRangeException>()
                         .WithMessage("Expiration timeout must be greater than zero*");
                 }
             }
@@ -578,7 +574,7 @@ namespace CacheManager.Tests
                     var expiration = TimeSpan.FromTicks(TimeSpan.FromDays(20).Ticks);
                     Action act = () => cache.Add(new CacheItem<object>(key, "value", ExpirationMode.Sliding, expiration));
 
-                    act.ShouldNotThrow();
+                    act.Should().NotThrow();
                     var item = cache.GetCacheItem(key);
                     item.Should().NotBeNull();
                     Math.Ceiling(item.ExpirationTimeout.TotalDays).Should().Be(Math.Ceiling(expiration.TotalDays));
@@ -898,7 +894,7 @@ namespace CacheManager.Tests
             {
                 Action act = () => cache.Add(new CacheItem<object>(key, key, ExpirationMode.Absolute, timeout));
 
-                act.ShouldThrow<ArgumentException>().WithMessage("*not supported*");
+                act.Should().Throw<ArgumentException>().WithMessage("*not supported*");
             }
         }
 
@@ -1044,10 +1040,8 @@ namespace CacheManager.Tests
                     .WithDictionaryHandle()
                     .WithExpiration(expirationMode, timeout));
 
-            act.ShouldNotThrow();
+            act.Should().NotThrow();
         }
-
-#if !NETCOREAPP
 
         [Fact]
         public void BaseCacheHandle_ExpirationInherits_Issue_1()
@@ -1071,8 +1065,6 @@ namespace CacheManager.Tests
                 handles[1].GetCacheItem(key).ExpirationTimeout.Should().Be(default(TimeSpan));
             }
         }
-
-#endif
 
         private static void ValidateExistsInAllHandles<T>(ICacheManager<T> cache, string key)
         {

@@ -19,7 +19,7 @@ namespace CacheManager.Tests
 
             external.AddConsole(LogLevel.Trace);
 
-            var loggerFactory = new MicrosoftLoggerFactoryAdapter(external);
+            var loggerFactory = new MicrosoftLoggerFactoryAdapter(() => external);
             var logger = loggerFactory.CreateLogger("cat");
 
             logger.Should().NotBeNull();
@@ -38,7 +38,7 @@ namespace CacheManager.Tests
 
             external.AddConsole(LogLevel.Debug);
 
-            var loggerFactory = new MicrosoftLoggerFactoryAdapter(external);
+            var loggerFactory = new MicrosoftLoggerFactoryAdapter(() => external);
             var logger = loggerFactory.CreateLogger("cat");
 
             logger.Should().NotBeNull();
@@ -55,7 +55,7 @@ namespace CacheManager.Tests
         {
             var external = new LoggerFactory();
             external.AddConsole(LogLevel.Information);
-            var loggerFactory = new MicrosoftLoggerFactoryAdapter(external);
+            var loggerFactory = new MicrosoftLoggerFactoryAdapter(() => external);
             var logger = loggerFactory.CreateLogger("cat");
 
             logger.Should().NotBeNull();
@@ -72,7 +72,7 @@ namespace CacheManager.Tests
         {
             var external = new LoggerFactory();
             external.AddConsole(LogLevel.Warning);
-            var loggerFactory = new MicrosoftLoggerFactoryAdapter(external);
+            var loggerFactory = new MicrosoftLoggerFactoryAdapter(() => external);
             var logger = loggerFactory.CreateLogger("cat");
 
             logger.Should().NotBeNull();
@@ -89,7 +89,7 @@ namespace CacheManager.Tests
         {
             var external = new LoggerFactory();
             external.AddConsole(LogLevel.Error);
-            var loggerFactory = new MicrosoftLoggerFactoryAdapter(external);
+            var loggerFactory = new MicrosoftLoggerFactoryAdapter(() => external);
             var logger = loggerFactory.CreateLogger("cat");
 
             logger.Should().NotBeNull();
@@ -106,7 +106,7 @@ namespace CacheManager.Tests
         {
             var external = new LoggerFactory();
             external.AddConsole(LogLevel.Critical);
-            var loggerFactory = new MicrosoftLoggerFactoryAdapter(external);
+            var loggerFactory = new MicrosoftLoggerFactoryAdapter(() => external);
             var logger = loggerFactory.CreateLogger("cat");
 
             logger.Should().NotBeNull();
@@ -124,7 +124,7 @@ namespace CacheManager.Tests
             Action act = () => ConfigurationBuilder.BuildConfiguration(
                 s => s.WithMicrosoftLogging((Action<ILoggerFactory>)null));
 
-            act.ShouldThrow<ArgumentNullException>().WithMessage("*factory*");
+            act.Should().Throw<ArgumentNullException>().WithMessage("*factory*");
         }
 
         [Fact]
@@ -133,7 +133,7 @@ namespace CacheManager.Tests
             Action act = () => ConfigurationBuilder.BuildConfiguration(
                 s => s.WithMicrosoftLogging((ILoggerFactory)null));
 
-            act.ShouldThrow<ArgumentNullException>().WithMessage("*loggerFactory*");
+            act.Should().Throw<ArgumentNullException>().WithMessage("*loggerFactory*");
         }
 
         [Fact]

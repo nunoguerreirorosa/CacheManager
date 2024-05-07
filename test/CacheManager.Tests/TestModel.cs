@@ -4,9 +4,7 @@ using ProtoBuf;
 
 namespace CacheManager.Tests
 {
-#if !NETCOREAPP
     [Serializable]
-#endif
     [ExcludeFromCodeCoverage]
     [ProtoContract]
     [Bond.Schema]
